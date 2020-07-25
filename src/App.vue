@@ -62,6 +62,8 @@
 </template>
 
 <script>
+import * as store from "./scripts/store";
+
 import Settings from "./components/Settings";
 import Master from "./components/Master";
 
@@ -81,6 +83,9 @@ export default {
     Master,
     Staff,
     Room
+  },
+  created() {
+    store.init();
   },
   methods: {
     print() {
