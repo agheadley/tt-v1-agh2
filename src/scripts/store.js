@@ -15,9 +15,9 @@ store.init = {
   ],
   weeks: [{ id: 0, name: "A" }, { id: 1, name: "B" }],
   blocks: [
-    { block: "A", color: "#eeeeee" },
-    { block: "B", color: "#eeeeee" },
-    { block: "C", color: "#eeeeee" }
+    { name: "A", color: "#ffdddd" },
+    { name: "B", color: "#ddffdd" },
+    { name: "C", color: "#ddddff" }
   ],
   lessons: [
     { day: "M", period: "1", id: 1, week: "A", block: "A" },
@@ -47,9 +47,16 @@ store.init = {
 
 let init = () => {
   store.settings = JSON.parse(JSON.stringify(store.init));
+
   store.data.weeks = [];
   for (let week of store.settings.weeks) {
-    let weekObj = { name: week.name, id: week.id, headers: [], rows: [] };
+    let weekObj = {
+      name: week.name,
+      id: week.id,
+      headers: [],
+      blocks: [],
+      rows: []
+    };
     for (let lesson of store.settings.lessons) {
       if (lesson.week === week.name) {
         let obj = {};
@@ -61,7 +68,18 @@ let init = () => {
         weekObj.headers.push(obj);
       }
     }
-
+    for (let block of store.settings.blocks) {
+      for (let [i, header] of weekObj.headers.entries()) {
+        if (block.name === header.block) {
+          weekObj.blocks.push({
+            headersIndex: i,
+            block: block.name,
+            name: header.name,
+            id: header.id
+          });
+        }
+      }
+    }
     store.data.weeks.push(weekObj);
   }
   console.log("init()", store.data.weeks);

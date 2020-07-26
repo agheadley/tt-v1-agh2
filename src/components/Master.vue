@@ -30,7 +30,9 @@
           title="master/block toggle"
           icons
           color="info"
-          text
+          fab
+          dark
+          small
           @click="blockView ? blockView=false : blockView=true"
         >
           <template v-if="!blockView">
@@ -52,40 +54,94 @@
 
     <!-- / week year select-->
     <!-- timetable entry-->
-    <v-simple-table>
-      <thead>
-        <tr>
-          <th>Year</th>
-          <th v-for="header in data.weeks[week].headers" v-bind:key="header.id">{{header.name}}</th>
-          <th>
-            <v-btn text icon color="red">
-              <v-icon>mdi-delete</v-icon>
-            </v-btn>
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="(row,rowIndex) in data.weeks[week].rows" v-bind:key="rowIndex">
-          <th>{{row.year.name}}</th>
-          <td
-            v-for="(col,colIndex) in row.data"
-            v-bind:key="colIndex"
-            @click="edit(rowIndex,colIndex)"
-          >
-            {{col.class}}
-            <br>
-            <b>{{col.staff}}</b>
-            <br>
-            <i>{{col.room}}</i>
-          </td>
-          <th>
-            <v-btn text icon>
-              <v-icon>mdi-delete</v-icon>
-            </v-btn>
-          </th>
-        </tr>
-      </tbody>
-    </v-simple-table>
+    <template v-if="!blockView">
+      <v-simple-table>
+        <thead>
+          <tr>
+            <th>Block</th>
+            <th
+              v-for="(header,headerIndex) in data.weeks[week].headers"
+              :style="getColor(headerIndex)"
+              v-bind:key="header.id"
+            >{{header.block}}</th>
+            <th></th>
+          </tr>
+
+          <tr>
+            <th>Year</th>
+            <th v-for="header in data.weeks[week].headers" v-bind:key="header.id">{{header.name}}</th>
+            <th>
+              <v-btn text icon color="red">
+                <v-icon>mdi-delete</v-icon>
+              </v-btn>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="(row,rowIndex) in data.weeks[week].rows" v-bind:key="rowIndex">
+            <th>{{row.year.name}}</th>
+            <td
+              v-for="(col,colIndex) in row.data"
+              v-bind:key="colIndex"
+              @click="edit(rowIndex,colIndex)"
+            >
+              {{col.class}}
+              <br>
+              <b>{{col.staff}}</b>
+              <br>
+              <i>{{col.room}}</i>
+            </td>
+            <th>
+              <v-btn text icon>
+                <v-icon>mdi-delete</v-icon>
+              </v-btn>
+            </th>
+          </tr>
+        </tbody>
+      </v-simple-table>
+    </template>
+
+    <template v-if="blockView">
+      <v-simple-table>
+        <thead>
+          <tr>
+            <th>Block</th>
+            <th v-for="header in data.weeks[week].blocks" v-bind:key="header.id">{{header.block}}</th>
+            <th></th>
+          </tr>
+          <tr>
+            <th>Year</th>
+            <th v-for="header in data.weeks[week].blocks" v-bind:key="header.id">{{header.name}}</th>
+            <th>
+              <v-btn text icon color="red">
+                <v-icon>mdi-delete</v-icon>
+              </v-btn>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="(row,rowIndex) in data.weeks[week].rows" v-bind:key="rowIndex">
+            <th>{{row.year.name}}</th>
+            <td
+              v-for="header in data.weeks[week].blocks"
+              v-bind:key="header.id"
+              @click="edit(rowIndex,header.headersIndex)"
+            >
+              {{row.data[header.headersIndex].class}}
+              <br>
+              <b>{{row.data[header.headersIndex].staff}}</b>
+              <br>
+              <i>{{row.data[header.headersIndex].room}}</i>
+            </td>
+            <th>
+              <v-btn text icon>
+                <v-icon>mdi-delete</v-icon>
+              </v-btn>
+            </th>
+          </tr>
+        </tbody>
+      </v-simple-table>
+    </template>
 
     <!-- /timetable entry-->
     <!-- add row-->
@@ -183,7 +239,18 @@ export default {
       this.dialog = true;
     },
     load() {},
-    save() {}
+    save() {},
+
+    getColor(headerIndex) {
+      let block = this.data.weeks[this.week].headers[headerIndex].block;
+      let style = "";
+      if (block !== "") {
+        let colorArr = this.settings.blocks.filter(el => el.name === block);
+        console.log(colorArr);
+        style = "background-color:" + colorArr[0].color;
+      }
+      return style;
+    }
   },
   watch: {}
 };
