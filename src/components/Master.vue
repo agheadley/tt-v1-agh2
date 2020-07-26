@@ -30,12 +30,20 @@
     <v-simple-table>
       <thead>
         <tr>
+          <th>Year</th>
           <th v-for="header in data.weeks[week].headers" v-bind:key="header.id">{{header.name}}</th>
         </tr>
       </thead>
       <tbody>
         <tr v-for="(row,rowIndex) in data.weeks[week].rows" v-bind:key="rowIndex">
-          </tr>
+          <th>{{row.year.name}}</th>
+          <td v-for="(col,colIndex) in row.data" v-bind:key="colIndex">class
+            <br>staff
+            <br>
+
+            room
+          </td>
+        </tr>
       </tbody>
     </v-simple-table>
 
@@ -70,6 +78,7 @@ export default {
     addRow() {
       store.addRow(this.week, this.year);
       this.data = store.getData();
+      console.log(this.data.weeks[0]);
     }
   },
   watch: {}
