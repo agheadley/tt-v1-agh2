@@ -33,8 +33,19 @@
         <v-item-group>
           <v-row>
             <v-col>
+              <v-btn icon>
+                <v-icon>mdi-import</v-icon>
+              </v-btn>
+            </v-col>
+            
+            <v-col>
               <v-btn icon @click="print">
                 <v-icon>mdi-printer</v-icon>
+              </v-btn>
+            </v-col>
+            <v-col>
+              <v-btn icon>
+                <v-icon>mdi-export</v-icon>
               </v-btn>
             </v-col>
             <v-col>
@@ -64,11 +75,11 @@
 <script>
 import * as store from "./scripts/store";
 
-import Settings from "./components/Settings";
-import Master from "./components/Master";
+import Settings from "./views/Settings";
+import Master from "./views/Master";
 
-import Staff from "./components/Staff";
-import Room from "./components/Room";
+import Staff from "./views/Staff";
+import Room from "./views/Room";
 
 export default {
   name: "App",
