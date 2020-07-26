@@ -2,8 +2,8 @@
   <v-container fluid>
     <!-- week year select-->
     <v-row align="baseline">
-      <v-col>{{settings.name}}</v-col>
-      <v-col>
+      <v-col cols="2">{{settings.name}}</v-col>
+      <v-col cols="3">
         <v-select
           v-model="week"
           :items="settings.weeks"
@@ -11,9 +11,10 @@
           item-text="name"
           item-value="id"
           outlined
+          dense
         />
       </v-col>
-      <v-col>
+      <v-col cols="3">
         <v-select
           v-model="year"
           :items="settings.years"
@@ -21,10 +22,34 @@
           item-text="name"
           item-value="id"
           outlined
+          dense
         />
       </v-col>
-      <v-col></v-col>
+      <v-col cols="4">
+        <v-btn
+          title="master/block toggle"
+          icons
+          color="info"
+          text
+          @click="blockView ? blockView=false : blockView=true"
+        >
+          <template v-if="!blockView">
+            <v-icon>mdi-shape</v-icon>
+          </template>
+          <template v-else>
+            <v-icon>mdi-view-week-outline</v-icon>
+          </template>
+        </v-btn>
+
+        <v-btn title="import" icons color="info" text @click="load">
+          <v-icon>mdi-import</v-icon>
+        </v-btn>
+        <v-btn title="export" icons color="info" text @click="save">
+          <v-icon>mdi-export</v-icon>
+        </v-btn>
+      </v-col>
     </v-row>
+
     <!-- / week year select-->
     <!-- timetable entry-->
     <v-simple-table>
@@ -32,6 +57,11 @@
         <tr>
           <th>Year</th>
           <th v-for="header in data.weeks[week].headers" v-bind:key="header.id">{{header.name}}</th>
+          <th>
+            <v-btn text icon color="red">
+              <v-icon>mdi-delete</v-icon>
+            </v-btn>
+          </th>
         </tr>
       </thead>
       <tbody>
@@ -44,10 +74,15 @@
           >
             {{col.class}}
             <br>
-            {{col.staff}}
+            <b>{{col.staff}}</b>
             <br>
-            {{col.room}}
+            <i>{{col.room}}</i>
           </td>
+          <th>
+            <v-btn text icon>
+              <v-icon>mdi-delete</v-icon>
+            </v-btn>
+          </th>
         </tr>
       </tbody>
     </v-simple-table>
@@ -90,6 +125,8 @@ export default {
       data: null,
       week: 0,
       year: 0,
+
+      blockView: false,
 
       dialog: false,
       dialogMessage: "",
@@ -144,7 +181,9 @@ export default {
       ].room;
 
       this.dialog = true;
-    }
+    },
+    load() {},
+    save() {}
   },
   watch: {}
 };
@@ -152,4 +191,8 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+td {
+  max-width: 5em;
+  overflow: hidden;
+}
 </style>

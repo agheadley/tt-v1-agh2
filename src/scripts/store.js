@@ -21,7 +21,7 @@ store.init = {
   ],
   lessons: [
     { day: "M", period: "1", id: 1, week: "A", block: "A" },
-    { day: "M", period: "2", id: 2, week: "A", block: "A" },
+    { day: "M", period: "2", id: 2, week: "A", block: "" },
     { day: "M", period: "3", id: 3, week: "A", block: "A" },
     { day: "M", period: "4", id: 4, week: "A", block: "A" },
     { day: "Tu", period: "1", id: 5, week: "A", block: "B" },

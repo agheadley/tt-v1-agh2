@@ -39,7 +39,7 @@
             </v-col>
             <v-col>
               <v-btn icon @click="dialog=true">
-                <v-icon>mdi-exit-to-app</v-icon>
+                <v-icon>mdi-close-circle</v-icon>
               </v-btn>
               <v-dialog v-model="dialog" max-width="50%">
                 <v-card>
