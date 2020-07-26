@@ -37,11 +37,16 @@
       <tbody>
         <tr v-for="(row,rowIndex) in data.weeks[week].rows" v-bind:key="rowIndex">
           <th>{{row.year.name}}</th>
-          <td v-for="(col,colIndex) in row.data" v-bind:key="colIndex">class
-            <br>staff
+          <td
+            v-for="(col,colIndex) in row.data"
+            v-bind:key="colIndex"
+            @click="edit(rowIndex,colIndex)"
+          >
+            {{col.class}}
             <br>
-
-            room
+            {{col.staff}}
+            <br>
+            {{col.room}}
           </td>
         </tr>
       </tbody>
@@ -54,6 +59,23 @@
       <v-icon dark>mdi-plus</v-icon>
     </v-btn>
     <!-- / add row-->
+    <!-- edit dialog -->
+    <v-dialog v-model="dialog" max-width="50%">
+      <v-card>
+        <v-card-title>{{dialogMessage}}</v-card-title>
+        <v-card-text>
+          <v-text-field label="class" dense outlined v-model="classText"></v-text-field>
+          <v-text-field label="staff" dense outlined v-model="staffText"></v-text-field>
+          <v-text-field label="room" dense outlined v-model="roomText"></v-text-field>
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="info" text @click="store()">store</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+
+    <!-- / edit dialog -->
   </v-container>
 </template>
 
@@ -67,7 +89,15 @@ export default {
       settings: null,
       data: null,
       week: 0,
-      year: 0
+      year: 0,
+
+      dialog: false,
+      dialogMessage: "",
+      rowIndex: null,
+      colIndex: null,
+      classText: null,
+      staffText: null,
+      roomText: null
     };
   },
   created() {
@@ -79,6 +109,41 @@ export default {
       store.addRow(this.week, this.year);
       this.data = store.getData();
       console.log(this.data.weeks[0]);
+    },
+    store() {
+      this.data.weeks[this.week].rows[this.rowIndex].data[
+        this.colIndex
+      ].class = this.classText;
+      this.data.weeks[this.week].rows[this.rowIndex].data[
+        this.colIndex
+      ].staff = this.staffText;
+      this.data.weeks[this.week].rows[this.rowIndex].data[
+        this.colIndex
+      ].room = this.roomText;
+
+      this.dialog = false;
+    },
+    edit(rowIndex, colIndex) {
+      this.dialogMessage = "[ " + this.data.weeks[this.week].name + " ";
+      this.dialogMessage +=
+        this.data.weeks[this.week].rows[rowIndex].year.name + " ] ";
+      this.dialogMessage += this.data.weeks[this.week].rows[rowIndex].data[
+        colIndex
+      ].name;
+      this.rowIndex = rowIndex;
+      this.colIndex = colIndex;
+
+      this.classText = this.data.weeks[this.week].rows[rowIndex].data[
+        colIndex
+      ].class;
+      this.staffText = this.data.weeks[this.week].rows[rowIndex].data[
+        colIndex
+      ].staff;
+      this.roomText = this.data.weeks[this.week].rows[rowIndex].data[
+        colIndex
+      ].room;
+
+      this.dialog = true;
     }
   },
   watch: {}
