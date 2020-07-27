@@ -37,7 +37,7 @@
                 <v-icon>mdi-import</v-icon>
               </v-btn>
             </v-col>
-            
+
             <v-col>
               <v-btn icon @click="print">
                 <v-icon>mdi-printer</v-icon>
